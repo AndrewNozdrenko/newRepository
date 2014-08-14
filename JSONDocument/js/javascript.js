@@ -27,213 +27,100 @@ var gallery = {
 	]
 };
 
-var len = gallery.images.length,
-    parentElem = document.getElementById("element");
+var len = gallery.images.length;
 
-function removeChild(node) {
-var children = node.childNodes
-    while(children.length) {
-        node.removeChild(children[0])
-    }
-}
+function Gallery(obj){
 
+	this.objectCustom =  obj;
+	this.len = obj.images.length;
 
-function showGallery(){
-	var newDiv,
-		icount = 0;
-		
-	removeChild(parentElem);
-	parentElem.style.height = len*500 + "px";
-	for(var i = 0; i < len; i++){
-		for(key in gallery.images[i]){
-			if(key === 'path')
-			{
-				newDiv = document.createElement('img');
-				newDiv.src = gallery.images[i][key];
-				newDiv.id = "res" + icount++;
-				newDiv.setAttribute("class", "res");
-				parentElem.appendChild(newDiv);
-			}
-			else
-			{
-				newDiv = document.createElement('span');
-				newDiv.innerHTML = gallery.images[i][key] + "<br>";
-				newDiv.id = "res" + icount++;
-				newDiv.setAttribute("class", "res");
-				parentElem.appendChild(newDiv);
-			}
+	this.showPictare = function(){
+		for(i = 0; i < this.len; i++){
+			console.log(this.objectCustom.images[i].name);
 		}
 	}
-}
-
-showGallery();
-
-var buttonForward = document.getElementById("forwardButton"), iteration = 0, iteration1 = 0, intCount = 0,
-	elementGet = document.getElementById("element"),
-	valueMargin = parseInt(elementGet.style.marginTop),
-	backButton = document.getElementById("backButton");
-
-buttonForward.onclick = function(){
-	  if(intCount === 0)
-	   valueMargin = 0;
-	  else
-	   valueMargin = parseInt(elementGet.style.marginTop);;
-	  iteration = valueMargin;
-	  Animated(valueMargin);
-	  intCount++;
-}
-backButton.onclick = function(){
-	valueMargin = parseInt(elementGet.style.marginTop);
-    iteration1 = valueMargin;
-	AnimatedBot(valueMargin);
-}
-
-function Animated(valueMargin){
-	iteration = iteration - 20;
-
-	elementGet.style.marginTop = String(iteration) + "px";
-	setTimeout(function(){
-							if(iteration > valueMargin - 480)
-							{
-								Animated(valueMargin);
-							}
-						}, 1);
-}
-
-function AnimatedBot(valueMargin){
-	iteration1 = iteration1 + 20;
-
-	elementGet.style.marginTop = String(iteration1) + "px";
-	setTimeout(function(){
-							if(iteration1 < valueMargin + 480)
-							{
-								AnimatedBot(valueMargin);
-							}
-						}, 1);
-}
 
 
-var addButton = document.getElementById("addButton");
-addButton.onclick = function(){
-	var nameText = document.getElementById("name").value,
-		pathText = document.getElementById("path").value,
-		nameDescription = document.getElementById("Description").value,
-		nameDate = document.getElementById("Date").value,
-		massivElem = {
-			"path": pathText,
-			"name": nameText,
-			"description": nameDescription,
-			"date": nameDate
-		};
-		
-		gallery.images.unshift({
-			"path": pathText,
-			"name": nameText,
-			"description": nameDescription,
-			"date": nameDate
-		});
+	this.editPictare = function(path, name, description, date, index){
+			this.objectCustom.images[index].name = name;
+			this.objectCustom.images[index].path = path;
+			this.objectCustom.images[index].description = description;
+			this.objectCustom.images[index].date = date;
+	}
 
-		len = gallery.images.length
-		showGallery();
-		addEvent();
-		
-}
+	this.deletePictare = function(index){
+		this.objectCustom.images.splice(index, 1);;
+		this.len = obj.images.length;
 
-var deleteFunction = function(){
-		gallery.images.shift();
-}
+	}
 
-var deleteButton = document.getElementById("deleteButton");
-deleteButton.onclick = function(){
-	deleteFunction();
-	showGallery();
-	addEvent();
-}
-var strNamber = 0;
-var masElementImg = new Array(len), listener = function() {
-strNamber = parseInt(this.id.substr(3))/4;
-
-		document.getElementById("name").value = gallery.images[strNamber].name;
-		document.getElementById("path").value = gallery.images[strNamber].path;
-		document.getElementById("Description").value = gallery.images[strNamber].description;
-		document.getElementById("Date").value = gallery.images[strNamber].date;
-};
-
-function addEvent(){
-for(var j = 0; j < len; j++)
-{
-	var str = "res" + String(j*4);
-	masElementImg[j] = document.getElementById(str);
-	masElementImg[j].addEventListener("click",listener,false);
-}
-}
-	addEvent();
-
-var editButton = document.getElementById("editButton");
-editButton.onclick = function(){
-	gallery.images[strNamber].name = document.getElementById("name").value;
-	gallery.images[strNamber].path = document.getElementById("path").value;
-	gallery.images[strNamber].description = document.getElementById("Description").value;
-	gallery.images[strNamber].date = document.getElementById("Date").value;
-	showGallery();
-	addEvent();
-}
+	this.addPictare = function(name, path, description, date){
+			var temp = 		{
+			"path": String(path),
+			"name": String(name),
+			"description": String(description),
+			"date": String(date)
+		}
+		this.objectCustom.images.push(temp);
+		this.len = obj.images.length;
+	}
 
 
-var sortButton = document.getElementById("sortButton"),
-	sortItem, t = 0;
-sortButton.onclick = function(){
-sortItem = String(document.getElementById("sort").value);
-gallery.images.sort( function(a, b) {
-  if (a[sortItem] < b[sortItem]) return -1;
-  if (a[sortItem] > b[sortItem]) return 1;
-  return 0;
-});
-showGallery();
-	addEvent();
-}
-
-var emptyButton = document.getElementById("emptyButton");
-emptyButton.onclick = function(){
-		for(var i = 0; i < len; i++){
-			if(gallery.images[i].description === "")
+	this.checkEmpty = function(){
+		for(var i = 0; i < this.len; i++){
+			if(this.objectCustom.images[i].description === "")
 			{
-				alert("You have empty value " + gallery.images[i].name);
+				console.log("You have empty value " + String(this.objectCustom.images[i].name));
 			}
 		}
 
-}
-
-var filterButton = document.getElementById("filterButton"),
-		textarray = document.getElementById("textarray");
-filterButton.onclick = function(){
-	var filterValue = document.getElementById("fliter").value;
-	
-	function isFilter(check) {
-				return check[filterValue] != "";
-	}
-	
-	var Arr = gallery.images.filter(isFilter);
-		for(var i = 0; i < len; i++){
-			textarray.value = textarray.value.substr() + " " + Arr[i].name;
 	}
 
-}
-
-
-var serialize = document.getElementById("serialize");
-serialize.onclick = function(){
-	var ch = document.getElementById("ch");
-	if(ch.checked){
-	textarray.value = JSON.stringify(gallery, function(key, value) {
-	  if (key == 'path') return undefined;
-	  if (key == 'date') return undefined;
-	  if (key == 'description') return undefined;
-	  return value;
-	});
-
-	}else
-	{
-		textarray.value = JSON.stringify(gallery);
+	this.filteredValue = function(){
+		function isFilter(check) {
+ 				return check['description'] != "";
+ 		}
+ 		var Arr = this.objectCustom.images.filter(isFilter);
+ 		alert(Arr.length);
+ 		for(var i = 0; i < Arr.length; i++){
+			console.log(Arr[i].name);
+		}
 	}
+
+
+	this.sort = function(){
+		function compareNumber(a, b) {
+  			if (a.name > b.name) return 1;
+  			if (a.name < b.name) return -1;
+		}
+		this.objectCustom.images.sort(compareNumber);
+	}
+
+	this.serialize = function(){
+	 var tempString = JSON.stringify(this.objectCustom, function(key, value) {
+	 	  if (key == 'path') return undefined;
+	 	  if (key == 'date') return undefined;
+	 	  if (key == 'description') return undefined;
+	 	  return value;
+	 	});
+	 console.log(tempString);
+	}
+
 }
+
+var galFunctions = new Gallery(gallery),
+	galOther = new Gallery(gallery);
+
+galFunctions.showPictare.call(galOther);
+galFunctions.showPictare();
+
+// galFunctions.editPictare("qqq","qqq","qqq","qqqq",1);
+// galFunctions.deletePictare(1);
+// galFunctions.addPictare("lll","lll","lll","lll");
+// galFunctions.showPictare();
+// galFunctions.checkEmpty();
+// galFunctions.filteredValue();
+
+//galFunctions.sort();
+//galFunctions.showPictare();
+galFunctions.serialize();
