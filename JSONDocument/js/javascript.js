@@ -42,10 +42,10 @@ function Gallery(obj){
 
 
 	this.editPictare = function(path, name, description, date, index){
-			this.objectCustom.images[index].name = name;
-			this.objectCustom.images[index].path = path;
-			this.objectCustom.images[index].description = description;
-			this.objectCustom.images[index].date = date;
+		this.objectCustom.images[index].name = name;
+		this.objectCustom.images[index].path = path;
+		this.objectCustom.images[index].description = description;
+		this.objectCustom.images[index].date = date;
 	}
 
 	this.deletePictare = function(index){
@@ -55,7 +55,7 @@ function Gallery(obj){
 	}
 
 	this.addPictare = function(name, path, description, date){
-			var temp = 		{
+		var temp = 	{
 			"path": String(path),
 			"name": String(name),
 			"description": String(description),
@@ -77,11 +77,12 @@ function Gallery(obj){
 	}
 
 	this.filteredValue = function(){
+		var Arr = this.objectCustom.images.filter(isFilter);
+
 		function isFilter(check) {
  				return check['description'] != "";
  		}
- 		var Arr = this.objectCustom.images.filter(isFilter);
- 		alert(Arr.length);
+
  		for(var i = 0; i < Arr.length; i++){
 			console.log(Arr[i].name);
 		}
